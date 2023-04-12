@@ -42,7 +42,7 @@ app.post('/register', async (req, res) => {
     }
 })
 
-app.get('/check', (req, res)=>{
+app.post('/check', (req, res)=>{
     let {name, message} = req.query;
     console.log({name, message});
     res.status(200).json({name, message});
