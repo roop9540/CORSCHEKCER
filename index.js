@@ -9,28 +9,35 @@ const MONGO_URL = process.env.MONGO_URL;
 
 const app = express();
 app.use(cors());
+app.use(function (req, res, next) {
+    //Enabling CORS
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x - client - key, x - client - token, x - client - secret, Authorization");
+      next();
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
 
-app.get('/', (req, res)=>{
+app.get('/', (req, res) => {
     res.status(200).send("Server is running")
 })
- app.post('/register', async(req, res)=>{
+app.post('/register', async (req, res) => {
     try {
         console.log(req.body)
-         const user = new USER({
-                name: req.body.name,
-                username: req.body.username,
-                password: req.body.password
+        const user = new USER({
+            name: req.body.name,
+            username: req.body.username,
+            password: req.body.password
 
-            })
-            const savedUser = await user.save(user);
+        })
+        const savedUser = await user.save(user);
 
-            res.status(200).send({
-                user: { name: user.name, user: user.username, password:user.password }
-            })
-        
+        res.status(200).send({
+            user: { name: user.name, user: user.username, password: user.password }
+        })
+
     } catch (err) {
         console.log(err)
         res.status(500).send({ message: "Internal Server Error" });
